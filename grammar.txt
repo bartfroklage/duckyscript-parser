@@ -1,0 +1,20 @@
+Statements := Statement * 
+Statement  := Assignment | TODO
+
+NumberAssigment      := VAR Identifier EQUALS ArithmeticExpression
+                     := Identifier EQUALS ArithmeticExpression
+
+
+ArithmeticExpression := ArithmeticExpression + ArchimeticTerm
+                     := ArithmeticExpression - ArchimeticTerm
+                     := ArchimeticTerm
+
+ArchimeticTerm       := ArchimeticTerm * ArchimeticFactor
+                     := ArchimeticTerm / ArchimeticFactor
+                     := ArchimeticFactor 
+
+ArchimeticFactor     := number
+                     := identifier
+                     := (ArithmeticExpression)
+                     := -ArchimeticFactor
+
