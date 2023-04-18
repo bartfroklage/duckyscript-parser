@@ -1,9 +1,12 @@
 Statements := Statement * 
 Statement  := Assignment | TODO
 
-NumberAssigment      := VAR Identifier EQUALS ArithmeticExpression
+Assigment            := VAR Identifier EQUALS ArithmeticExpression
                      := Identifier EQUALS ArithmeticExpression
-
+                     := VAR Identifier EQUALS BooleanExpression
+                     := Identifier EQUALS BooleanExpression
+                     := VAR Identifier EQUALS StringExpression
+                     := Identifier EQUALS StringExpression
 
 ArithmeticExpression := ArithmeticExpression + ArchimeticTerm
                      := ArithmeticExpression - ArchimeticTerm

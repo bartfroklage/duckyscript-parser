@@ -31,7 +31,22 @@ class Parser:
         token = self.peek_token()
         if token.type in (TT_IDENTIFIER, TT_VAR):
             return self.parse_assignment()
-        raise InvalidSyntaxError('Unexpected token on {}.'.format(token.pos))
+        raise InvalidSyntaxError('Unexpected token at {}.'.format(token.pos))
     
-    def parse_statement(self) -> AssignmentNode:
+    def parse_assignment(self) -> AssignmentNode:
+        token = self.peek_token()
+
+        introduce = (token.type == TT_VAR)
+        if introduce: self.pop_token()
+
+        identifier_token = self.pop_token()
+        if identifier_token.type != TT_IDENTIFIER:
+            raise InvalidSyntaxError('Unexpected token at {}, expected IDENTIFIER got {}.'.format(token.pos, identifier_token.type))
+
+        expression = self.parse_expression()
+        return AssignmentNode()
+    
+    def parse_expression(self) -> ExpressionNode:
+        pass
+
             
