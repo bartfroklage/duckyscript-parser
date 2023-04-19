@@ -39,14 +39,20 @@ class Parser:
         introduce = (token.type == TT_VAR)
         if introduce: self.pop_token()
 
-        identifier_token = self.pop_token()
-        if identifier_token.type != TT_IDENTIFIER:
-            raise InvalidSyntaxError('Unexpected token at {}, expected IDENTIFIER got {}.'.format(token.pos, identifier_token.type))
-
-        expression = self.parse_expression()
-        return AssignmentNode()
+        identifier_node = self.parse_identifier()
+        expression_node = self.parse_expression()
+        return AssignmentNode(identifier_node, expression_node, introduce)
     
     def parse_expression(self) -> ExpressionNode:
         pass
 
+    def parse_identifier(self):
+        token = self.pop_token()
+        if token.type != TT_IDENTIFIER:
+            raise InvalidSyntaxError('Unexpected token at {}, expected IDENTIFIER got {}.'.format(token.pos, token.type))
+        return IdentifierNode(token.value)
+    
+    def parse_archimetic_factor(self):
+        token = self.pop_token()
+        if token.type == TT_LPAREN
             
