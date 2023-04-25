@@ -26,13 +26,7 @@ class Parser:
         if token.type in (TT_PLUS, TT_MIN):
             operator = token.type
             self.advance()
-            if self.eof():
-                raise SyntaxError('Expected INT got EOF at pos {}.'.format(token.pos))
-            token = self.current_token()
-            if token.type not in(TT_INT):
-                raise SyntaxError('Expected INT got {} at pos {}.'.format(token.type, token.pos))
-            
-            return UnaryOpNode(operator, token.value)
+            return UnaryOpNode(operator, self.parse_factor())
 
         elif token.type in (TT_INT):
             self.advance()
