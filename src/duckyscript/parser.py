@@ -6,53 +6,66 @@ from tokens import *
 class Parser:
     def __init__(self, tokens: ctypes.Array):
         self.tokens = tokens
-        self.idx = 0
+        self.token_idx = 0
     
-    def peek_token(self) -> Token:
-        if self.eof(): return None
-        return self.tokens[self.idx]
+    def current_token(self) -> Token:
+        if len(self.tokens) > self.token_idx:
+            return self.tokens[self.token_idx]
+        else:
+            return None
     
-    def pop_token(self) -> Token:
-        if self.eof(): return None
-        token = self.tokens[self.idx]
-        self.idx += 1
-        return token
-    
+    def advance(self):
+        self.token_idx += 1
+
     def eof(self) -> bool:
-        return len(self.tokens) <= self.idx 
-
-    def parse(self) -> StatementsNode:
-        script = StatementsNode()
-        while not(self.eof()):
-            script.append(self.parse_statement())
-        return script
+        return len(self.tokens) <= self.token_idx
     
-    def parse_statement(self) -> StatementNode:
-        token = self.peek_token()
-        if token.type in (TT_IDENTIFIER, TT_VAR):
-            return self.parse_assignment()
-        raise InvalidSyntaxError('Unexpected token at {}.'.format(token.pos))
-    
-    def parse_assignment(self) -> AssignmentNode:
-        token = self.peek_token()
+    def parse_factor(self):
+        token = self.current_token()
 
-        introduce = (token.type == TT_VAR)
-        if introduce: self.pop_token()
-
-        identifier_node = self.parse_identifier()
-        expression_node = self.parse_expression()
-        return AssignmentNode(identifier_node, expression_node, introduce)
-    
-    def parse_expression(self) -> ExpressionNode:
-        pass
-
-    def parse_identifier(self):
-        token = self.pop_token()
-        if token.type != TT_IDENTIFIER:
-            raise InvalidSyntaxError('Unexpected token at {}, expected IDENTIFIER got {}.'.format(token.pos, token.type))
-        return IdentifierNode(token.value)
-    
-    def parse_archimetic_factor(self):
-        token = self.pop_token()
-        if token.type == TT_LPAREN
+        if token.type in (TT_PLUS, TT_MIN):
+            operator = token.type
+            self.advance()
+            if self.eof():
+                raise SyntaxError('Expected INT got EOF at pos {}.'.format(token.pos))
+            token = self.current_token()
+            if token.type not in(TT_INT):
+                raise SyntaxError('Expected INT got {} at pos {}.'.format(token.type, token.pos))
             
+            return UnaryOpNode(operator, token.value)
+
+        elif token.type in (TT_INT):
+            self.advance()
+            return NumberNode(token.value)
+        
+        elif token.type in (TT_LPAREN):
+            self.advance()
+            expr = self.parse_expr()
+            token = self.current_token()
+            if token.type not in(TT_RPAREN):
+                raise SyntaxError('Expected ) got {} at pos {}.'.format(token.type, token.pos))
+            self.advance()
+            return expr
+            
+        raise SyntaxError('Expected INT got {} at pos {}.'.format(token.type, token.pos))
+    
+    def parse(self):
+        return self.parse_expr()
+
+    def parse_term(self):
+        return self.parse_binop(self.parse_factor, (TT_MULTIPLY, TT_DIVIDE))
+    
+    def parse_expr(self):
+        return self.parse_binop(self.parse_term, (TT_MIN, TT_PLUS))
+    
+
+    def parse_binop(self, func, ops):
+        left = func()
+        while not self.eof() and self.current_token().type in ops:
+            operator_token = self.current_token()
+            self.advance()
+
+            right = func()
+            left = BinOpNode(left, operator_token, right)
+        
+        return left

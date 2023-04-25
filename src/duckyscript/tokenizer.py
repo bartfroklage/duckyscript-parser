@@ -43,5 +43,5 @@ class Tokenizer:
                 posInfo = self.pos_info(pos)
                 chr = self.text[pos]
                 raise IllegalCharError('Unexpected \'{}\' at {}.'.format(chr, posInfo))
-                       
+        
         return tokens

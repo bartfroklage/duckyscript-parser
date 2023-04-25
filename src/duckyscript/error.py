@@ -10,6 +10,10 @@ class IllegalCharError(Error):
     def __init__(self, details: str):
         super().__init__('Illegal Character', details)
 
-class InvalidSyntaxError(Error):
+class SyntaxError(Error):
     def __init__(self, details: str):
         super().__init__('Syntax Error', details)
+
+class RuntimeException(Error):
+    def __init__(self, str, details: str):
+        super().__init__('Runtime exception', details)

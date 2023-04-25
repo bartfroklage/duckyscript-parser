@@ -1,22 +1,8 @@
-Statements := Statement * 
-Statement  := Assignment | TODO
+expr        : term ((PLUS | MINUS) term)*
 
-Assigment            := VAR Identifier EQUALS ArithmeticExpression
-                     := Identifier EQUALS ArithmeticExpression
-                     := VAR Identifier EQUALS BooleanExpression
-                     := Identifier EQUALS BooleanExpression
-                     := VAR Identifier EQUALS StringExpression
-                     := Identifier EQUALS StringExpression
+term        : factor ((MUL | DIV) factor)*
 
-ArithmeticExpression := ArithmeticExpression + ArchimeticTerm
-                     := ArithmeticExpression - ArchimeticTerm
-                     := ArchimeticTerm
-
-ArchimeticTerm       := ArchimeticTerm * ArchimeticFactor
-                     := ArchimeticTerm / ArchimeticFactor
-                     := ArchimeticFactor 
-
-ArchimeticFactor     := number
-                     := identifier
-                     := (ArithmeticExpression)
-                     := -ArchimeticFactor
+factor      : INT|FLOAT
+            : (PLUS|MINUS) factor
+            : LPAREN expr RPAREN
+            

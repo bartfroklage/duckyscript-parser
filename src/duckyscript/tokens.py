@@ -31,9 +31,10 @@ TOKENS_DATA = [
     TokenInfo(TT_EQUALS, '=', False, False),
     TokenInfo(TT_MIN, '\-', False, False),
     TokenInfo(TT_PLUS, '\+', False, False),
-    TokenInfo(TT_DIVIDE, '\*', False, False),
+    TokenInfo(TT_MULTIPLY, '\*', False, False),
+    TokenInfo(TT_DIVIDE, '/', False, False),
     TokenInfo(TT_LPAREN, '\(', False, False),
-    TokenInfo(TT_RPAREN, '\)', False, False),
+    TokenInfo(TT_RPAREN, '\)', False, False)
 ]
 
 class PosInfo:
