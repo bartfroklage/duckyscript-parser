@@ -3,13 +3,15 @@ from tokenizer import *
 from parser import *
 from nodes import *
 from error import *
+from context import *
 
 class Interpreter:
     def __init__(self, script):
         self.script = script
 
     def run(self):
-        return self.script.eval()
+        context = Context()
+        return self.script.execute(context)
 
    
 if len(sys.argv) != 2:
@@ -23,9 +25,10 @@ script_file.close()
 tokenizer = Tokenizer(script)
 tokens = tokenizer.tokenize()
 
+print(tokens)
+
 parser = Parser(tokens)
 script = parser.parse()
 
-print(script)
 interpreter = Interpreter(script)
-print(interpreter.run())
+interpreter.run()

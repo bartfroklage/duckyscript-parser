@@ -1,1 +1,13 @@
-(40 + 4) * -(8 + 1)
+VAR $XX = (40 + 4) * -(8 + 1)
+$XX = 100 + $XX
+REM Pietje puk is pietje puk
+PRINT $XX
+REM_BLOCK TESTING
+    TESTING
+    TESTSING
+    TESTING
+END_REM
+
+PRINT $XX
+
+

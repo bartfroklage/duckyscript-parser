@@ -27,6 +27,7 @@ class Tokenizer:
             
             invalid_char = True
             for tokenData in TOKENS_DATA:
+                
                 if match := tokenData.pattern.match(self.text, pos):
                     invalid_char = False
 
