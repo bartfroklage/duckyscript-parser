@@ -40,6 +40,7 @@ TOKENS_DATA = [
     TokenInfo(TT_PRINT, 'PRINT', False, False, False),
     TokenInfo(TT_REM, 'REM (.*)', True, False, False),
     TokenInfo(TT_REM, 'REM_BLOCK ((.*\n*)*?)END_REM', True, False, True)
+    
 ]
 
 class PosInfo:
