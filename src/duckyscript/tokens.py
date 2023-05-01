@@ -18,6 +18,8 @@ TT_MIN          = 'MIN'
 TT_PLUS         = 'PLUS'
 TT_MULTIPLY     = 'MULTIPLY'
 TT_DIVIDE       = 'DIVIDE'
+TT_GREATER_THEN = '>'
+TT_LESS_THEN    = '<'
 TT_LPAREN       = 'LPAREN'
 TT_RPAREN       = 'RPAREN'
 TT_PRINT        = 'PRINT'
@@ -31,6 +33,9 @@ TT_IF           = 'IF'
 TT_THEN         = 'THEN'
 TT_ENDIF        = 'END_IF'
 TT_ELSE         = 'ELSE'
+TT_WHILE        = 'WHILE'
+TT_ENDWHILE     = 'END_WHILE'
+
 
 TOKENS_DATA = [
     TokenInfo(TT_BOOLEAN, 'TRUE|FALSE', False, True, False),
@@ -59,7 +64,9 @@ TOKENS_DATA = [
     TokenInfo(TT_IF, 'IF', False, True, False),
     TokenInfo(TT_ENDIF, 'END_IF', False, False, False),
     TokenInfo(TT_THEN, 'THEN', False, False, False),
-    TokenInfo(TT_ELSE, 'ELSE', False, False, False)
+    TokenInfo(TT_ELSE, 'ELSE', False, False, False),
+    TokenInfo(TT_WHILE, 'WHILE', False, False, False),
+    TokenInfo(TT_ENDWHILE, 'END_WHILE', False, False, False)
 ]
 
 class PosInfo:

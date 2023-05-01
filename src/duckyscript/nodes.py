@@ -140,7 +140,7 @@ class DelayNode(StatementNode):
     def execute(self, context: Context):
         time.sleep(self.node.eval(context) /1000)
 
-class ConditionalNode(StatementNode):
+class IfNode(StatementNode):
     def __init__(self, condition: Node, if_script: ScriptNode, else_script: ScriptNode):
         self.condition = condition
         self.if_script = if_script
@@ -153,3 +153,12 @@ class ConditionalNode(StatementNode):
         
         if condition_result != 0:
             self.if_script.execute(context)
+
+class WhileNode(StatementNode):
+    def __init__(self, condition: Node, script: ScriptNode):
+        self.condition = condition
+        self.script = script
+
+    def execute(self, context: Context):
+        while (self.condition.eval(context) != 0):
+            self.script.execute(context)

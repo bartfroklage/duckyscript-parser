@@ -121,6 +121,7 @@ class Parser:
         if token.type not in (TT_THEN):
             raise SyntaxError(f'Expected THEN got {token.type} at pos {token.pos}.')
         
+        self.advance()
         if_script = self.parse_script([TT_ELSE, TT_ENDIF])
 
         token = self.current_token()
@@ -132,7 +133,21 @@ class Parser:
         token = self.current_token()
         if token.type not in (TT_ENDIF):
             raise SyntaxError(f'Expected END_IF got {token.type} at pos {token.pos}.')
+        
+        self.advance()
+        return IfNode(condition, if_script, else_script)
+    
+    def parse_while(self):
+        token = self.current_token()
+        if token.type not in (TT_WHILE):
+            raise SyntaxError(f'Expected WHILE got {token.type} at pos {token.pos}.')
+        
+        self.advance()
+        condition = self.parse_expr()
+        script = self.parse_script([TT_ENDWHILE])
 
+        return WhileNode(condition, script)
+    
     def parse_factor(self):
         token = self.current_token()
 
