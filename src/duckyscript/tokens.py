@@ -7,9 +7,9 @@ class TokenInfo:
         self.skip = skip
         self.has_value = has_value
 
-TT_BOOLEAN      = 'BOOLEAN'
+TT_BOOLEAN      = 'BOOL'
 TT_INT          = 'INT'
-TT_STRING       = 'STRING'
+TT_STR          = 'STR'
 TT_WHITESPACE   = 'WHITESPACE'
 TT_VAR          = 'VAR'
 TT_IDENTIFIER   = 'IDENTIFIER'
@@ -22,6 +22,15 @@ TT_LPAREN       = 'LPAREN'
 TT_RPAREN       = 'RPAREN'
 TT_PRINT        = 'PRINT'
 TT_REM          = 'REM'
+TT_STRING       = 'STRING'
+TT_STRINGLN     = 'STRINGLN'
+TT_CURSORKEY    = 'CURSORKEY'
+TT_SYSTEMKEY    = 'SYSTEMKEY'
+TT_DELAY        = 'DELAY'
+TT_IF           = 'IF'
+TT_THEN         = 'THEN'
+TT_ENDIF        = 'END_IF'
+TT_ELSE         = 'ELSE'
 
 TOKENS_DATA = [
     TokenInfo(TT_BOOLEAN, 'TRUE|FALSE', False, True, False),
@@ -37,10 +46,20 @@ TOKENS_DATA = [
     TokenInfo(TT_DIVIDE, '/', False, False, False),
     TokenInfo(TT_LPAREN, '\(', False, False, False),
     TokenInfo(TT_RPAREN, '\)', False, False, False),
-    TokenInfo(TT_PRINT, 'PRINT', False, False, False),
+    TokenInfo(TT_PRINT, 'PRINT\s+', False, False, False),
     TokenInfo(TT_REM, 'REM (.*)', True, False, False),
-    TokenInfo(TT_REM, 'REM_BLOCK ((.*\n*)*?)END_REM', True, False, True)
-    
+    TokenInfo(TT_REM, 'REM_BLOCK ((.*\n*)*?)END_REM\s+', True, False, True),
+    TokenInfo(TT_STRING, 'STRING (.*)', False, True, False), 
+    TokenInfo(TT_STRING, 'STRING\n((.*\n*)*?)END_STRING\s+', False, True, True), 
+    TokenInfo(TT_STRINGLN, 'STRINGLN (.*)', False, True, False), 
+    TokenInfo(TT_STRINGLN, 'STRINGLN\n((.*\n*)*?)END_STRINGLN\s+', False, True, True),
+    TokenInfo(TT_CURSORKEY, '(UP|DOWN|LEFT|RIGHT|UPARROW|DOWNARROW|LEFTARROW|RIGHTARROW|PAGEUP|PAGEDOWN|HOME|END|DEL|DELETE|BACKSPACE|TAB|SPACE)\s+', False, True, False),
+    TokenInfo(TT_SYSTEMKEY, '(ENTER|ESCAPE|PAUSE|BREAK|PRINTSCREEN|MENU|APP|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12)\s+', False, True, False),
+    TokenInfo(TT_DELAY, 'DELAY', False, True, False),
+    TokenInfo(TT_IF, 'IF', False, True, False),
+    TokenInfo(TT_ENDIF, 'END_IF', False, False, False),
+    TokenInfo(TT_THEN, 'THEN', False, False, False),
+    TokenInfo(TT_ELSE, 'ELSE', False, False, False)
 ]
 
 class PosInfo:

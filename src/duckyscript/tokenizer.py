@@ -35,7 +35,8 @@ class Tokenizer:
                         pos = match.end()
                         break
                     
-                    token = Token(tokenData.type, match.group(0) if tokenData.has_value else '',  self.pos_info(pos))
+                    group_ix = 0 if match.lastindex is None else 1
+                    token = Token(tokenData.type, match.group(group_ix) if tokenData.has_value else '',  self.pos_info(pos))
                     tokens.append(token)
                     pos = match.end()
                     break

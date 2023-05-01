@@ -9,5 +9,16 @@ REM_BLOCK TESTING
 END_REM
 
 PRINT $XX
+STRING asfdasdfas
+PRINT $XX
+STRING
+    text
+    asdfasdf
+END_STRING
+UP
+DELAY 10000
+PRINT $XX
 
-
+IF ($XX) THEN
+    PRINT $XX
+END_IF

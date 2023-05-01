@@ -23,9 +23,9 @@ class Parser:
     def parse(self):
         return self.parse_script()
 
-    def parse_script(self) -> ScriptNode:
+    def parse_script(self, end_token_types=[]) -> ScriptNode:
         script = ScriptNode()
-        while not self.eof():
+        while not self.eof() and self.current_token().type not in end_token_types:
             script.append_statement(self.parse_statement())
         return script
 
@@ -35,6 +35,16 @@ class Parser:
             return self.parse_assignment()
         elif token.type in (TT_PRINT):
             return self.parse_print()
+        elif token.type in (TT_STRING):
+            return self.parse_string()
+        elif token.type in (TT_STRINGLN):
+            return self.parse_string_line()
+        elif token.type in (TT_CURSORKEY):
+            return self.parse_cursor_key()
+        elif token.type in (TT_DELAY):
+            return self.parse_delay()
+        elif token.type in (TT_IF):
+            return self.parse_if()
 
         raise SyntaxError(f'Unexpected {token.type} at pos: {token.pos}.')
     
@@ -67,7 +77,62 @@ class Parser:
             raise SyntaxError(f'Expected PRINT got {token.type} at pos {token.pos}.')
         self.advance()
         return PrintNode(self.parse_expr())
+      
+    def parse_string(self):
+        token = self.current_token()
+
+        if token.type not in (TT_STRING):
+            raise SyntaxError(f'Expected STRING got {token.type} at pos {token.pos}.')
+        self.advance()
+        return StringNode(token.value)
         
+    def parse_string_line(self):
+        token = self.current_token()
+
+        if token.type not in (TT_STRINGLN):
+            raise SyntaxError(f'Expected STRINGLN got {token.type} at pos {token.pos}.')
+        self.advance()
+        return StringLineNode(token.value)
+    
+    def parse_cursor_key(self):
+        token = self.current_token()
+        if token.type not in (TT_CURSORKEY):
+            raise SyntaxError(f'Expected CURSORKEY got {token.type} at pos {token.pos}.')
+        self.advance()
+        return CursorKeyNode(token.value)
+    
+    def parse_delay(self):
+        token = self.current_token()
+        if token.type not in (TT_DELAY):
+            raise SyntaxError(f'Expected DELAY got {token.type} at pos {token.pos}.')
+
+        self.advance()
+        return DelayNode(self.parse_expr())
+    
+    def parse_if(self):
+        token = self.current_token()
+        if token.type not in (TT_IF):
+            raise SyntaxError(f'Expected IF got {token.type} at pos {token.pos}.')
+    
+        self.advance()
+        condition = self.parse_expr()
+
+        token = self.current_token()
+        if token.type not in (TT_THEN):
+            raise SyntaxError(f'Expected THEN got {token.type} at pos {token.pos}.')
+        
+        if_script = self.parse_script([TT_ELSE, TT_ENDIF])
+
+        token = self.current_token()
+        else_script = None
+        if token.type in (TT_ELSE):
+            self.advance()
+            else_script = self.parse_script([TT_ENDIF])
+        
+        token = self.current_token()
+        if token.type not in (TT_ENDIF):
+            raise SyntaxError(f'Expected END_IF got {token.type} at pos {token.pos}.')
+
     def parse_factor(self):
         token = self.current_token()
 
@@ -111,3 +176,4 @@ class Parser:
             left = BinOpNode(left, operator_token, right)
         
         return left
+    

@@ -1,3 +1,4 @@
+import time
 from tokens import *
 from context import *
 
@@ -106,3 +107,49 @@ class PrintNode(StatementNode):
     def execute(self, context: Context):
         print(self.expr.eval(context))
 
+class StringNode(StatementNode):
+    def __init__(self, value: str):
+        super().__init__()
+        self.value = value
+    
+    def execute(self, context: Context):
+        print(f'sending: {self.value}')
+
+class StringLineNode(StatementNode):
+    def __init__(self, value: str):
+        super().__init__()
+        self.value = value
+    
+    def execute(self, context: Context):
+        print(f'sending: {self.value}')
+
+
+class CursorKeyNode(StatementNode):
+    def __init__(self, value: str):
+        super().__init__()
+        self.value = value
+    
+    def execute(self, context: Context):
+        print(f'sending: {self.value}')
+
+class DelayNode(StatementNode):
+    def __init__(self, node: Node):
+        super().__init__()
+        self.node = node
+
+    def execute(self, context: Context):
+        time.sleep(self.node.eval(context) /1000)
+
+class ConditionalNode(StatementNode):
+    def __init__(self, condition: Node, if_script: ScriptNode, else_script: ScriptNode):
+        self.condition = condition
+        self.if_script = if_script
+        self.else_script = else_script
+
+    def execute(self, context: Context):
+        condition_result = self.condition.eval(context)
+        if condition_result == 0 and self.else_script is not None:
+            self.else_script.execute(context)
+        
+        if condition_result != 0:
+            self.if_script.execute(context)
